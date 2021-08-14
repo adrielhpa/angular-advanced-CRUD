@@ -3,7 +3,7 @@ export class Entry {
   constructor(
     public id?: number,
     public name?: string,
-    public descriprion?: string,
+    public description?: string,
     public type?: string,
     public amount?: string,
     public date?: string,
