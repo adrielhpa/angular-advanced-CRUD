@@ -73,6 +73,34 @@
           </div>
         </div>
 
+        <!--amount-->
+        <div class="form-group col-md-3">
+          <label for="amount">Valor</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">R$</div>
+            </div>
+            <input
+              [imask]="imaskConfig"
+              type="text"
+              class="form-control text-end"
+              id="amount"
+              formControlName="amount"
+            />
+          </div>
+
+          <div
+            class="text-danger"
+            *ngIf="
+              entryForm.get('amount').invalid && entryForm.get('amount').touched
+            "
+          >
+            <div *ngIf="entryForm.get('amount').errors.required">
+              Dado obrigatório
+            </div>
+          </div>
+        </div>
+
         <!--date-->
         <div class="form-group col-md-2 col-sm-3">
           <label for="date">Data</label>
@@ -140,7 +168,9 @@
               formControlName="categoryId"
               class="form-control"
             >
-              <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
+              <option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+              </option>
             </select>
 
             <div
@@ -165,34 +195,6 @@
               id="description"
               formControlName="description"
             />
-          </div>
-        </div>
-
-        <!--amount-->
-        <div class="form-group col-md-3">
-          <label for="amount">Valor</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <div class="input-group-text">R$</div>
-            </div>
-            <input
-              [imask]="imaskConfig"
-              type="text"
-              class="form-control text-end"
-              id="amount"
-              formControlName="amount"
-            />
-          </div>
-
-          <div
-            class="text-danger"
-            *ngIf="
-              entryForm.get('amount').invalid && entryForm.get('amount').touched
-            "
-          >
-            <div *ngIf="entryForm.get('amount').errors.required">
-              Dado obrigatório
-            </div>
           </div>
         </div>
       </div>
