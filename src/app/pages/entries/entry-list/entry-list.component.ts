@@ -15,7 +15,7 @@ export class EntryListComponent implements OnInit {
   ngOnInit(): void {
     this.entryService.getAll().subscribe(
       (responseEntries) => {
-        this.entries = responseEntries;
+        this.entries = responseEntries.sort((a, b) => b.id - a.id);
       },
       (error) => console.log(`ERRO AO CARREGAR A LISTA => ${error}`)
     );
@@ -27,9 +27,7 @@ export class EntryListComponent implements OnInit {
     if (mustDelete) {
       this.entryService.delete(entry.id).subscribe(
         () => {
-          this.entries = this.entries.filter(
-            (element) => element !== entry
-          );
+          this.entries = this.entries.filter((element) => element !== entry);
         },
         (error) => {
           alert('ERRO AO EXCLUIR CATEGORY');
@@ -38,5 +36,4 @@ export class EntryListComponent implements OnInit {
       );
     }
   }
-
 }
