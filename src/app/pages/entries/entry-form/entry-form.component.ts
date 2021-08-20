@@ -1,3 +1,4 @@
+import { CategoryService } from './../../categories/shared/category.service';
 import { EntryService } from './../shared/entry.service';
 import { Entry } from './../shared/entry.model';
 import { AfterContentChecked, Component, OnInit } from '@angular/core';
@@ -6,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 
 import * as toastr from 'toastr';
+import { Category } from '../../categories/shared/category.model';
 
 @Component({
   selector: 'app-entry-form',
@@ -19,18 +21,75 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   serverErrorMessages: string[] = [];
   submittingForm: boolean = false;
   entry: Entry = new Entry();
+  categories: Array<Category>;
+
+  imaskConfig = {
+    mask: Number,
+    scale: 2,
+    thousandSeparator: '',
+    padFractionalZeros: true,
+    normalizeZeros: true,
+    radix: ',',
+  };
+
+  ptBR = {
+    firstDayOfWeek: 0,
+    dayNames: [
+      'Domingo',
+      'Segunda',
+      'Terça',
+      'Quarta',
+      'Quinta',
+      'Sexta',
+      'Sábado',
+    ],
+    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+    dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
+    monthNames: [
+      'Janeiro',
+      'Fevereiro',
+      'Março',
+      'Abril',
+      'Maio',
+      'Junho',
+      'Julho',
+      'Agosto',
+      'Setembro',
+      'Outubro',
+      'Novembro',
+      'Dezembro',
+    ],
+    monthNamesShort: [
+      'Jan',
+      'Fev',
+      'Mar',
+      'Abr',
+      'Mai',
+      'Jun',
+      'Jul',
+      'Ago',
+      'Set',
+      'Out',
+      'Nov',
+      'Dez',
+    ],
+    today: 'Hoje',
+    clear: 'Limpar',
+  };
 
   constructor(
     private entryService: EntryService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
     this.setCurrentAction();
     this.buildEntryForm();
     this.loadEntry();
+    this.loadCategories();
   }
 
   ngAfterContentChecked(): void {
@@ -47,6 +106,15 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     }
   }
 
+  get typeOptions(): Array<any> {
+    return Object.entries(Entry.types).map(([value, text]) => {
+      return {
+        text: text,
+        value: value,
+      };
+    });
+  }
+
   //PRIVATE METHODS
   private setCurrentAction() {
     if (this.route.snapshot.url[0].path === 'new') {
@@ -61,10 +129,10 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
       id: [null],
       name: [null, [Validators.required, Validators.minLength(2)]],
       description: [null],
-      type: [null, [Validators.required]],
+      type: ['expense', [Validators.required]],
       amount: [null, [Validators.required]],
-      data: [null, [Validators.required]],
-      paid: [null, [Validators.required]],
+      date: [null, [Validators.required]],
+      paid: [true, [Validators.required]],
       categoryId: [null, [Validators.required]],
     });
   }
@@ -85,6 +153,12 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     }
   }
 
+  private loadCategories() {
+    this.categoryService
+      .getAll()
+      .subscribe((categories) => (this.categories = categories));
+  }
+
   private setPageTitle() {
     if (this.currentAction === 'new') {
       this.pageTitle = 'Cadastro de Novo Lançamento';
@@ -95,10 +169,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   }
 
   private createEntry() {
-    const entry: Entry = Object.assign(
-      new Entry(),
-      this.entryForm.value
-    );
+    const entry: Entry = Object.assign(new Entry(), this.entryForm.value);
 
     this.entryService.create(entry).subscribe(
       (entry) => this.actionsForSuccess(entry),
@@ -107,10 +178,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   }
 
   private updateEntry() {
-    const entry: Entry = Object.assign(
-      new Entry(),
-      this.entryForm.value
-    );
+    const entry: Entry = Object.assign(new Entry(), this.entryForm.value);
 
     this.entryService.update(entry).subscribe(
       (entry) => this.actionsForSuccess(entry),
