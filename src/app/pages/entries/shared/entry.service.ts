@@ -1,31 +1,19 @@
+import { BaseResourceService } from 'src/app/shared/services/base-resource.service';
 import { CategoryService } from './../../categories/shared/category.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { Injectable, Injector } from '@angular/core';
 import { Entry } from './entry.model';
+import { Observable } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EntryService {
-  private API: string = 'api/entries';
-
+export class EntryService extends BaseResourceService<Entry> {
   constructor(
-    private http: HttpClient,
+    protected injector: Injector,
     private categoryService: CategoryService
-  ) {}
-
-  getAll(): Observable<Entry[]> {
-    return this.http
-      .get<Entry>(this.API)
-      .pipe(catchError(this.handleError), map(this.jsonDataToEntries));
-  }
-
-  getById(id: number): Observable<Entry> {
-    return this.http
-      .get(`${this.API}/${id}`)
-      .pipe(catchError(this.handleError), map(this.jsonDataToEntry));
+  ) {
+    super('api/entries', injector);
   }
 
   create(entry: Entry): Observable<Entry> {
@@ -33,9 +21,7 @@ export class EntryService {
       mergeMap((category) => {
         entry.category = category;
 
-        return this.http
-          .post<Entry>(this.API, entry)
-          .pipe(catchError(this.handleError), map(this.jsonDataToEntry));
+        return super.create(entry);
       })
     );
   }
@@ -45,23 +31,13 @@ export class EntryService {
       mergeMap((category) => {
         entry.category = category;
 
-        return this.http.put<Entry>(`${this.API}/${entry.id}`, entry).pipe(
-          catchError(this.handleError),
-          map(() => entry)
-        );
+        return super.update(entry);
       })
     );
   }
 
-  delete(id: number): Observable<any> {
-    return this.http.delete(`${this.API}/${id}`).pipe(
-      catchError(this.handleError),
-      map(() => null)
-    );
-  }
-
   //PRIVATE METHODS
-  private jsonDataToEntries(jsonData: any[]): Entry[] {
+  protected jsonDataToEntries(jsonData: any[]): Entry[] {
     const entries: Entry[] = [];
     jsonData.forEach((element) => {
       const entry = Object.assign(new Entry(), element);
@@ -70,12 +46,7 @@ export class EntryService {
     return entries;
   }
 
-  private jsonDataToEntry(jsonData: any): Entry {
+  protected jsonDataToEntry(jsonData: any): Entry {
     return Object.assign(new Entry(), jsonData);
-  }
-
-  private handleError(error: any): Observable<any> {
-    console.log('ERRO NA REQUISIÇÃO => ', error);
-    return throwError(error);
   }
 }
