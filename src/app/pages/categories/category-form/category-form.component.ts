@@ -2,7 +2,7 @@ import { CategoryService } from './../shared/category.service';
 import { Category } from './../shared/category.model';
 import { Component, Injector } from '@angular/core';
 import { Validators } from '@angular/forms';
-import { BaseResourceFormComponent } from 'src/app/shared/components/base-resource-form/base-resource-form/base-resource-form.component';
+import { BaseResourceFormComponent } from 'src/app/shared/components/base-resource-form/base-resource-form.component';
 
 @Component({
   selector: 'app-category-form',
