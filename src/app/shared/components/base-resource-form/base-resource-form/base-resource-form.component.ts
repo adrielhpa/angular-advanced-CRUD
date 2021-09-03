@@ -11,8 +11,6 @@ import { switchMap } from 'rxjs/operators';
 import { BaseResourceModel } from 'src/app/shared/models/base-resource.model';
 import { BaseResourceService } from 'src/app/shared/services/base-resource.service';
 
-import * as toastr from 'toastr';
-
 @Component({ template: '' })
 export abstract class BaseResourceFormComponent<T extends BaseResourceModel>
   implements OnInit, AfterContentChecked
