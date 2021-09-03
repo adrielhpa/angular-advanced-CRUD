@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BaseResourceFormComponent } from './components/base-resource-form/base-resource-form/base-resource-form.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    BaseResourceFormComponent
+  ],
   imports: [CommonModule, ReactiveFormsModule],
   exports: [CommonModule, ReactiveFormsModule],
 })
