@@ -28,7 +28,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let entry of entries">
+    <tr *ngFor="let entry of resources">
       <td>
         <strong>{{ entry.name }}</strong
         ><br />
@@ -47,7 +47,7 @@
           {{ entry.amount }}
         </strong>
         <br />
-        <span class="badge bg-light text-dark">{{entry.paidText}}</span>
+        <span class="badge bg-light text-dark">{{ entry.paidText }}</span>
       </td>
       <td class="text-center">
         <a
@@ -56,7 +56,7 @@
           >Editar</a
         >
         <button
-          (click)="deleteEntry(entry)"
+          (click)="deleteResource(entry)"
           class="btn btn-outline-danger btn-sm"
         >
           Excluir
