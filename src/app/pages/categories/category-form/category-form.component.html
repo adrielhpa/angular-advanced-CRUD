@@ -22,19 +22,9 @@
             id="name"
             formControlName="name"
           />
-        </div>
-        <div
-          class="text-danger"
-          *ngIf="
-            resourceForm.get('name').invalid && resourceForm.get('name').touched
-          "
-        >
-          <div *ngIf="resourceForm.get('name').errors.required">
-            Dado obrigatório
-          </div>
-          <div *ngIf="resourceForm.get('name').errors.minlength">
-            Deve ter no mínimo 2 caracteres
-          </div>
+          <app-form-field-error
+            [form-control]="resourceForm.get('name')"
+          ></app-form-field-error>
         </div>
 
         <div class="form-group col-md-8">
