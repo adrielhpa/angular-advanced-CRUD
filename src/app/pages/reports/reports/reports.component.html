@@ -58,21 +58,21 @@
   <div class="card text-center text-white bg-success">
     <div class="card-header">Total de Receitas</div>
     <div class="card-body">
-      <h3 class="card-title">3000</h3>
+      <h3 class="card-title">{{ this.revenueTotal }}</h3>
     </div>
   </div>
 
   <div class="card text-center text-white bg-danger ms-4">
     <div class="card-header">Total de Despesas</div>
     <div class="card-body">
-      <h3 class="card-title">5000</h3>
+      <h3 class="card-title">{{ this.expenseTotal }}</h3>
     </div>
   </div>
 
   <div class="card text-center text-white bg-info ms-4">
     <div class="card-header">Saldo</div>
     <div class="card-body">
-      <h3 class="card-title">1</h3>
+      <h3 class="card-title">{{ this.balance }}</h3>
     </div>
   </div>
 </div>
@@ -80,7 +80,19 @@
 <hr />
 
 <div class="row mt-5 mb-4">
-  <div class="col-6">Gráfico de Receitas</div>
+  <div class="col-6">
+    <p-chart
+      type="bar"
+      [data]="this.revenueChartData"
+      [options]="this.chartOptions"
+    ></p-chart>
+  </div>
 
-  <div class="col-6">Gráfico de Despesas</div>
+  <div class="col-6">
+    <p-chart
+      type="bar"
+      [data]="this.expenseChartData"
+      [options]="this.chartOptions"
+    ></p-chart>
+  </div>
 </div>
