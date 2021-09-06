@@ -6,9 +6,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { InMemoryDatabase } from '../in-memory-database';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [NavbarComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -17,10 +18,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(InMemoryDatabase),
   ],
-  exports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-  ],
+  exports: [BrowserModule, AppRoutingModule, HttpClientModule, NavbarComponent],
 })
 export class CoreModule {}
